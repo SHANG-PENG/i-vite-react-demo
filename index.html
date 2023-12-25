@@ -8,19 +8,18 @@
   <title>Apple Pay</title>
   <style>
     apple-pay-button {
-      --apple-pay-button-width: 150px;
-      --apple-pay-button-height: 30px;
-      --apple-pay-button-border-radius: 3px;
+      --apple-pay-button-width: 300px;
+      --apple-pay-button-height: 60px;
+      --apple-pay-button-border-radius: 0px;
       --apple-pay-button-padding: 0px 0px;
       --apple-pay-button-box-sizing: border-box;
     }
-  </style>
+    </style>
   <script async crossorigin
   src="https://applepay.cdn-apple.com/jsapi/v1.1.0/apple-pay-sdk.js"
   ></script>
   <script type="text/javascript">
     function onApplePayButtonClicked() {
-
       if (!ApplePaySession) {
         return;
       }
@@ -109,7 +108,7 @@
 <body>
   <div id="root"></div>
   <br/>
-  <apple-pay-button buttonstyle="black" type="plain" locale="en-US">Apple Pay</apple-pay-button>
+  <apple-pay-button buttonstyle="black" type="plain" locale="en-US" onclick="onApplePayButtonClicked()">Apple Pay</apple-pay-button>
   <script type="module" src="/src/main.jsx"></script>
 </body>
 
