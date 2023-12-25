@@ -128,6 +128,7 @@ console.log('handlePaymentMethodReceived...', paymentDetails);
         console.log('session.onvalidatemerchant...', event)
         // Call your own server to request a new merchant session.
         const merchantSession = await validateMerchant();
+        console.log('session.onvalidatemerchant...merchantSession', merchantSession)
         session.completeMerchantValidation(merchantSession);
       };
 
