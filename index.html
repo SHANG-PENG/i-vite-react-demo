@@ -1,125 +1,187 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-
-<head>
-  <meta charset="UTF-8" />
-  <!-- <link rel="icon" type="image/svg+xml" href="/vite.svg" /> -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Apple Pay</title>
-  <style>
-    apple-pay-button {
-      --apple-pay-button-width: 300px;
-      --apple-pay-button-height: 60px;
-      --apple-pay-button-border-radius: 0px;
-      --apple-pay-button-padding: 0px 0px;
-      --apple-pay-button-box-sizing: border-box;
-    }
-
-    .app-pay-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 80vh;
-    }
-    </style>
-
-  <script async crossorigin
-  src="https://applepay.cdn-apple.com/jsapi/v1.1.0/apple-pay-sdk.js"
-  ></script>
-  <script type="text/javascript">
-    function onApplePayButtonClicked() {
-      if (!ApplePaySession) {
-        return;
+  <head>
+    <meta charset="UTF-8" />
+    <!-- <link rel="icon" type="image/svg+xml" href="/vite.svg" /> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Apple Pay</title>
+    <style>
+      apple-pay-button {
+        --apple-pay-button-width: 300px;
+        --apple-pay-button-height: 60px;
+        --apple-pay-button-border-radius: 0px;
+        --apple-pay-button-padding: 0px 0px;
+        --apple-pay-button-box-sizing: border-box;
       }
 
-      // Define ApplePayPaymentRequest
-      const request = {
-        "countryCode": "US",
-        "currencyCode": "USD",
-        "merchantCapabilities": [
-          "supports3DS"
-        ],
-        "supportedNetworks": [
-          "visa",
-          "masterCard",
-          "amex",
-          "discover"
-        ],
-        "total": {
-          "label": "Demo (Card is not charged)",
-          "type": "final",
-          "amount": "1.99"
-        }
-      };
+      .app-pay-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 80vh;
+      }
+    </style>
 
-      // Create ApplePaySession
-      const session = new ApplePaySession(3, request);
+    <script
+      async
+      crossorigin
+      src="https://applepay.cdn-apple.com/jsapi/v1.1.0/apple-pay-sdk.js"
+    ></script>
+    <script type="text/javascript">
+      async function handlePaymentMethodReceived(event) {
+        const paymentDetails = {
+          transaction_type: 1,
+          merchant_id: "01",
+          terminal_id: "pd0001",
+          transaction_amount: 1099,
 
-      session.onvalidatemerchant = async event => {
-        // Call your own server to request a new merchant session.
-        const merchantSession = await validateMerchant();
-        session.completeMerchantValidation(merchantSession);
-      };
-
-      session.onpaymentmethodselected = event => {
-        // Define ApplePayPaymentMethodUpdate based on the selected payment method.
-        // No updates or errors are needed, pass an empty object.
-        const update = {};
-        session.completePaymentMethodSelection(update);
-      };
-
-      session.onshippingmethodselected = event => {
-        // Define ApplePayShippingMethodUpdate based on the selected shipping method.
-        // No updates or errors are needed, pass an empty object. 
-        const update = {};
-        session.completeShippingMethodSelection(update);
-      };
-
-      session.onshippingcontactselected = event => {
-        // Define ApplePayShippingContactUpdate based on the selected shipping contact.
-        const update = {};
-        session.completeShippingContactSelection(update);
-      };
-
-      session.onpaymentauthorized = event => {
-        // Define ApplePayPaymentAuthorizationResult
-        const result = {
-          "status": ApplePaySession.STATUS_SUCCESS
+          order_number: "1122334355",
+          reference_number: "1122234455",
+          entry_mode: 7,
+          payment_processer: 1,
+          card_encrypt_info: {
+            encryption_data:
+              "eyJkYXRhIjoiVldiVkZ0cVJ3dGZjWkUzXC81TWRYYWx3RkF3WCtxXC9xbjFnOGFaSVhGV1wvUmVUZ29EcTJRYXAyQnM3NEp0MlwvV0VRY3pGVXFBVUx0S3RDb0lRVGxsbXpWeVNCWkRjYm9uMVwvNVA2UkV0TkR0cm9laUkwNTNFeitzMTNTVkhya3JxK3lOS2NCY1BYTlZZQ2xoWjhFbjFDS3gyZ01BaEdpM3FWZmo3U0I2NW92ZVlEUk96cHo4Y0ZUalwvVHBtWEhTMHZveVVkSHplemVDemR1MXpoZ2R6ZERVNUZwcnFHeHgrNjJac1BkZmZxZk9ndWpvWGIyY3VxY25hZUptWm9lVm5ncThuR2x1TXRwdzVcL1NER0VsY1hFNkNqeHR2d1lzNHBJc2lTdzBXWUFuOVEwMFljS2xUdTZ4SlwvQjZtT0FkK2drU0pNb1FMR2VtaGl6eWxWeGJyODZcL1c5VU5MWWY4Wms3OFpUXC92TlVEWm1TMFV1bDRhWm1ycXpYRDM5a1NlWXpVemdmUlV4Wlk4cEJwMHIwcWFoaHlvV1JjQ1kzTjNsS2ZraVVFc2lOUVZ6WHM9Iiwic2lnbmF0dXJlIjoiTUlBR0NTcUdTSWIzRFFFSEFxQ0FNSUFDQVFFeERUQUxCZ2xnaGtnQlpRTUVBZ0V3Z0FZSktvWklodmNOQVFjQkFBQ2dnRENDQStNd2dnT0lvQU1DQVFJQ0NFd3dRVWxSblZRMk1Bb0dDQ3FHU000OUJBTUNNSG94TGpBc0JnTlZCQU1NSlVGd2NHeGxJRUZ3Y0d4cFkyRjBhVzl1SUVsdWRHVm5jbUYwYVc5dUlFTkJJQzBnUnpNeEpqQWtCZ05WQkFzTUhVRndjR3hsSUVObGNuUnBabWxqWVhScGIyNGdRWFYwYUc5eWFYUjVNUk13RVFZRFZRUUtEQXBCY0hCc1pTQkpibU11TVFzd0NRWURWUVFHRXdKVlV6QWVGdzB4T1RBMU1UZ3dNVE15TlRkYUZ3MHlOREExTVRZd01UTXlOVGRhTUY4eEpUQWpCZ05WQkFNTUhHVmpZeTF6YlhBdFluSnZhMlZ5TFhOcFoyNWZWVU0wTFZCU1QwUXhGREFTQmdOVkJBc01DMmxQVXlCVGVYTjBaVzF6TVJNd0VRWURWUVFLREFwQmNIQnNaU0JKYm1NdU1Rc3dDUVlEVlFRR0V3SlZVekJaTUJNR0J5cUdTTTQ5QWdFR0NDcUdTTTQ5QXdFSEEwSUFCTUlWZCszcjFzZXlJWTlvM1hDUW9TR054N0M5Ynl3b1BZUmdsZGxLOUtWQkc0TkNEdGdSODBCK2d6TWZIRlREOStzeUlOYTYxZFR2OUpLSmlUNThEeE9qZ2dJUk1JSUNEVEFNQmdOVkhSTUJBZjhFQWpBQU1COEdBMVVkSXdRWU1CYUFGQ1B5U2NSUGsrVHZKK2JFOWloc1A2SzdcL1M1TE1FVUdDQ3NHQVFVRkJ3RUJCRGt3TnpBMUJnZ3JCZ0VGQlFjd0FZWXBhSFIwY0RvdkwyOWpjM0F1WVhCd2JHVXVZMjl0TDI5amMzQXdOQzFoY0hCc1pXRnBZMkV6TURJd2dnRWRCZ05WSFNBRWdnRVVNSUlCRURDQ0FRd0dDU3FHU0liM1kyUUZBVENCXC9qQ0J3d1lJS3dZQkJRVUhBZ0l3Z2JZTWdiTlNaV3hwWVc1alpTQnZiaUIwYUdseklHTmxjblJwWm1sallYUmxJR0o1SUdGdWVTQndZWEowZVNCaGMzTjFiV1Z6SUdGalkyVndkR0Z1WTJVZ2IyWWdkR2hsSUhSb1pXNGdZWEJ3YkdsallXSnNaU0J6ZEdGdVpHRnlaQ0IwWlhKdGN5QmhibVFnWTI5dVpHbDBhVzl1Y3lCdlppQjFjMlVzSUdObGNuUnBabWxqWVhSbElIQnZiR2xqZVNCaGJtUWdZMlZ5ZEdsbWFXTmhkR2x2YmlCd2NtRmpkR2xqWlNCemRHRjBaVzFsYm5SekxqQTJCZ2dyQmdFRkJRY0NBUllxYUhSMGNEb3ZMM2QzZHk1aGNIQnNaUzVqYjIwdlkyVnlkR2xtYVdOaGRHVmhkWFJvYjNKcGRIa3ZNRFFHQTFVZEh3UXRNQ3N3S2FBbm9DV0dJMmgwZEhBNkx5OWpjbXd1WVhCd2JHVXVZMjl0TDJGd2NHeGxZV2xqWVRNdVkzSnNNQjBHQTFVZERnUVdCQlNVVjl0djFYU0Job21KZGk5K1Y0VUg1NXRZSkRBT0JnTlZIUThCQWY4RUJBTUNCNEF3RHdZSktvWklodmRqWkFZZEJBSUZBREFLQmdncWhrak9QUVFEQWdOSkFEQkdBaUVBdmdsWEgrY2VIbk5iVmVXdnJMVEhMK3RFWHpBWVVpTEhKUkFDdGg2OWIxVUNJUURSaXpVS1hkYmRickYwWURXeEhyTE9oOCtqNXE5c3ZZT0FpUTNJTE4ycVl6Q0NBdTR3Z2dKMW9BTUNBUUlDQ0VsdEw3ODZtTnFYTUFvR0NDcUdTTTQ5QkFNQ01HY3hHekFaQmdOVkJBTU1Fa0Z3Y0d4bElGSnZiM1FnUTBFZ0xTQkhNekVtTUNRR0ExVUVDd3dkUVhCd2JHVWdRMlZ5ZEdsbWFXTmhkR2x2YmlCQmRYUm9iM0pwZEhreEV6QVJCZ05WQkFvTUNrRndjR3hsSUVsdVl5NHhDekFKQmdOVkJBWVRBbFZUTUI0WERURTBNRFV3TmpJek5EWXpNRm9YRFRJNU1EVXdOakl6TkRZek1Gb3dlakV1TUN3R0ExVUVBd3dsUVhCd2JHVWdRWEJ3YkdsallYUnBiMjRnU1c1MFpXZHlZWFJwYjI0Z1EwRWdMU0JITXpFbU1DUUdBMVVFQ3d3ZFFYQndiR1VnUTJWeWRHbG1hV05oZEdsdmJpQkJkWFJvYjNKcGRIa3hFekFSQmdOVkJBb01Da0Z3Y0d4bElFbHVZeTR4Q3pBSkJnTlZCQVlUQWxWVE1Ga3dFd1lIS29aSXpqMENBUVlJS29aSXpqMERBUWNEUWdBRThCY1JoQm5YWklYVkdsNGxnUWQyNklDaTc5NTdyazNnamZ4TGsrRXpWdFZtV3pXdUl0Q1hkZzBpVG51NkNQMTJGODZJeTNhN1puQyt5T2dwaFA5VVJhT0I5ekNCOURCR0JnZ3JCZ0VGQlFjQkFRUTZNRGd3TmdZSUt3WUJCUVVITUFHR0ttaDBkSEE2THk5dlkzTndMbUZ3Y0d4bExtTnZiUzl2WTNOd01EUXRZWEJ3YkdWeWIyOTBZMkZuTXpBZEJnTlZIUTRFRmdRVUlcL0pKeEUrVDVPOG41c1QyS0d3XC9vcnY5TGtzd0R3WURWUjBUQVFIXC9CQVV3QXdFQlwvekFmQmdOVkhTTUVHREFXZ0JTN3NONmhXRE9JbXFTS21kNit2ZXV2MnNza3F6QTNCZ05WSFI4RU1EQXVNQ3lnS3FBb2hpWm9kSFJ3T2k4dlkzSnNMbUZ3Y0d4bExtTnZiUzloY0hCc1pYSnZiM1JqWVdjekxtTnliREFPQmdOVkhROEJBZjhFQkFNQ0FRWXdFQVlLS29aSWh2ZGpaQVlDRGdRQ0JRQXdDZ1lJS29aSXpqMEVBd0lEWndBd1pBSXdPczl5ZzFFV21iR0crelhEVnNwaXZcL1FYN2RrUGRVMmlqcjd4bklGZVFyZUorSmozbTFtZm1OVkJEWStkNmNMK0FqQXlMZFZFSWJDakJYZHNYZk00TzVCblwvUmQ4TENGdGxrXC9HY21tQ0VtOVUrSHA5RzVuTG13bUpJV0VHbVE4SmtoMEFBREdDQVlnd2dnR0VBZ0VCTUlHR01Ib3hMakFzQmdOVkJBTU1KVUZ3Y0d4bElFRndjR3hwWTJGMGFXOXVJRWx1ZEdWbmNtRjBhVzl1SUVOQklDMGdSek14SmpBa0JnTlZCQXNNSFVGd2NHeGxJRU5sY25ScFptbGpZWFJwYjI0Z1FYVjBhRzl5YVhSNU1STXdFUVlEVlFRS0RBcEJjSEJzWlNCSmJtTXVNUXN3Q1FZRFZRUUdFd0pWVXdJSVREQkJTVkdkVkRZd0N3WUpZSVpJQVdVREJBSUJvSUdUTUJnR0NTcUdTSWIzRFFFSkF6RUxCZ2txaGtpRzl3MEJCd0V3SEFZSktvWklodmNOQVFrRk1ROFhEVEl6TVRJeU16QXpNVFF3T1Zvd0tBWUpLb1pJaHZjTkFRazBNUnN3R1RBTEJnbGdoa2dCWlFNRUFnR2hDZ1lJS29aSXpqMEVBd0l3THdZSktvWklodmNOQVFrRU1TSUVJTU5qVHVkUUpjc01FWVpyemY2Q2oyMjZNS3VZREthMklNUWhOY0tja3ZDNk1Bb0dDQ3FHU000OUJBTUNCRWN3UlFJZ1NXeUx1ckNQUmhPcWFUdytKYmhobm9HVW1KSVJLOUZMbjhyUEYwUHo4bWtDSVFDNktJcVwvU0ZhRHJvRktSd25tT3hVNEI3WVIrWEdad2tWbFk4dUoxbGJPQWdBQUFBQUFBQT09IiwiaGVhZGVyIjp7InB1YmxpY0tleUhhc2giOiJNVFB2WkJnbFwvTWZPdisyaytWTXlIZE41em4xeitSREZ3b3pSRDNmQmduOD0iLCJlcGhlbWVyYWxQdWJsaWNLZXkiOiJNRmt3RXdZSEtvWkl6ajBDQVFZSUtvWkl6ajBEQVFjRFFnQUU4YnRIQ0d1bUQxUlJUdXVIUnErMXVOaEZ5S1VoOUxDUnduYkZoWkJUMzBZWEx5WjBMc0NwXC9DVHdxaW9rTVwvNUY3VWhTYVIzUlMrWlZ6T3l4cWdzTzBBPT0iLCJ0cmFuc2FjdGlvbklkIjoiNDBhYWE3NDhiMzBkOTIwYmE5YzhiYTk4ZDQ2ODhkZWJlZGMzYjY5NWM2MzAzZjgzOGE4YTYyZmU5NjgxNDFlMiJ9LCJ2ZXJzaW9uIjoiRUNfdjEifQ==",
+            encrypt_type: 6,
+          },
         };
-        session.completePayment(result);
-      };
 
-      session.oncouponcodechanged = event => {
-        // Define ApplePayCouponCodeUpdate
-        const newTotal = calculateNewTotal(event.couponCode);
-        const newLineItems = calculateNewLineItems(event.couponCode);
-        const newShippingMethods = calculateNewShippingMethods(event.couponCode);
-        const errors = calculateErrors(event.couponCode);
-
-        session.completeCouponCodeChange({
-          newTotal: newTotal,
-          newLineItems: newLineItems,
-          newShippingMethods: newShippingMethods,
-          errors: errors,
+        const response = await fetch(
+          "https://dev-api.aldelo.cloud/apgs-ms/rest/v1/api/input",
+          {
+            method: "post",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ paymentDetails }),
+          }
+        ).then((res) => {
+          return res.json();
         });
-      };
+        if (response.error) {
+          // Report to the browser that the payment failed.
+          console.log(response.error);
+          event.complete("fail");
+        } else {
+          // Report to the browser that the confirmation was successful, prompting
+          // it to close the browser payment method collection interface.
+          event.complete("success");
+          // Let Stripe.js handle the rest of the payment flow, including 3D Secure if needed.
+          const { error, paymentIntent } = await stripe.confirmCardPayment(
+            response.paymentIntent.client_secret
+          );
+        }
+      }
 
-      session.oncancel = event => {
-        // Payment canceled by WebKit
-      };
+      function onApplePayButtonClicked() {
+        if (!ApplePaySession) {
+          return;
+        }
 
-      session.begin();
-    }
-  </script>
-</head>
+        // Define ApplePayPaymentRequest
+        // const request = {
+        //   "countryCode": "US",
+        //   "currencyCode": "USD",
+        //   "merchantCapabilities": [
+        //     "supports3DS"
+        //   ],
+        //   "supportedNetworks": [
+        //     "visa",
+        //     "masterCard",
+        //     "amex",
+        //     "discover"
+        //   ],
+        //   "total": {
+        //     "label": "Demo (Card is not charged)",
+        //     "type": "final",
+        //     "amount": "10.99"
+        //   }
+        // };
+        const request = {
+          supportedMethods: "https://apple.com/apple-pay",
+          data: {
+            version: 3,
+            merchantIdentifier: "merchant.com.apdemo",
+            merchantCapabilities: ["supports3DS"],
+            supportedNetworks: ["amex", "discover", "masterCard", "visa"],
+            countryCode: "US",
+          },
+        };
 
-<body>
-  <div id="root"></div>
-  <br>
-  <div class="app-pay-container">
-    <apple-pay-button buttonstyle="black" type="plain" locale="en-US" onclick="onApplePayButtonClicked()"></apple-pay-button>
-  </div>
-  <!-- <script type="module" src="/src/main.jsx"></script> -->
-</body>
+        // Create ApplePaySession
+        const session = new ApplePaySession(3, request);
 
+        session.onvalidatemerchant = async (event) => {
+          // Call your own server to request a new merchant session.
+          const merchantSession = await validateMerchant();
+          session.completeMerchantValidation(merchantSession);
+        };
+
+        session.onpaymentmethodselected = (event) => {
+          // Define ApplePayPaymentMethodUpdate based on the selected payment method.
+          // No updates or errors are needed, pass an empty object.
+          const update = {};
+          session.completePaymentMethodSelection(update);
+        };
+
+        session.onshippingmethodselected = (event) => {
+          // Define ApplePayShippingMethodUpdate based on the selected shipping method.
+          // No updates or errors are needed, pass an empty object.
+          const update = {};
+          session.completeShippingMethodSelection(update);
+        };
+
+        session.onshippingcontactselected = (event) => {
+          // Define ApplePayShippingContactUpdate based on the selected shipping contact.
+          const update = {};
+          session.completeShippingContactSelection(update);
+        };
+
+        session.onpaymentauthorized = (event) => {
+          // Define ApplePayPaymentAuthorizationResult
+          const result = {
+            status: ApplePaySession.STATUS_SUCCESS,
+          };
+          session.completePayment(result);
+        };
+
+        session.oncouponcodechanged = (event) => {
+          // Define ApplePayCouponCodeUpdate
+          const newTotal = calculateNewTotal(event.couponCode);
+          const newLineItems = calculateNewLineItems(event.couponCode);
+          const newShippingMethods = calculateNewShippingMethods(
+            event.couponCode
+          );
+          const errors = calculateErrors(event.couponCode);
+
+          session.completeCouponCodeChange({
+            newTotal: newTotal,
+            newLineItems: newLineItems,
+            newShippingMethods: newShippingMethods,
+            errors: errors,
+          });
+        };
+
+        session.oncancel = (event) => {
+          // Payment canceled by WebKit
+        };
+
+        session.begin();
+      }
+    </script>
+  </head>
+
+  <body>
+    <div id="root"></div>
+    <br />
+    <div class="app-pay-container">
+      <apple-pay-button
+        buttonstyle="black"
+        type="plain"
+        locale="en-US"
+        onclick="onApplePayButtonClicked()"
+      ></apple-pay-button>
+    </div>
+    <!-- <script type="module" src="/src/main.jsx"></script> -->
+  </body>
 </html>
