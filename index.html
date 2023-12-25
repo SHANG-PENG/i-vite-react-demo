@@ -14,7 +14,15 @@
       --apple-pay-button-padding: 0px 0px;
       --apple-pay-button-box-sizing: border-box;
     }
+
+    .app-pay-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 80vh;
+    }
     </style>
+
   <script async crossorigin
   src="https://applepay.cdn-apple.com/jsapi/v1.1.0/apple-pay-sdk.js"
   ></script>
@@ -107,9 +115,11 @@
 
 <body>
   <div id="root"></div>
-  <br/>
-  <apple-pay-button buttonstyle="black" type="plain" locale="en-US" onclick="onApplePayButtonClicked()">Apple Pay</apple-pay-button>
-  <script type="module" src="/src/main.jsx"></script>
+  <br>
+  <div class="app-pay-container">
+    <apple-pay-button buttonstyle="black" type="plain" locale="en-US" onclick="onApplePayButtonClicked()"></apple-pay-button>
+  </div>
+  <!-- <script type="module" src="/src/main.jsx"></script> -->
 </body>
 
 </html>
