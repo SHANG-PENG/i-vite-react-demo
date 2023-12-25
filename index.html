@@ -117,9 +117,13 @@ console.log('handlePaymentMethodReceived...', paymentDetails);
         },
       };
 
+      console.log('onApplePayButtonClicked...request', request)
+
       // Create ApplePaySession
       const session = new ApplePaySession(3, request);
 
+      console.log('onApplePayButtonClicked...session', session)
+      
       session.onvalidatemerchant = async (event) => {
         console.log('session.onvalidatemerchant...', event)
         // Call your own server to request a new merchant session.
