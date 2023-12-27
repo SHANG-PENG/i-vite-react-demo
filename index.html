@@ -77,15 +77,12 @@
     }
 
     function onApplePayButtonClicked() {
-      console.log(
-        "onApplePayButtonClicked... ApplePaySession",
-        ApplePaySession
-      );
-      if (!ApplePaySession) {
-        return;
-      }
+      console.log( "onApplePayButtonClicked... ApplePaySession", ApplePaySession);
+
+      if (!ApplePaySession) return;
 
       var merchantIdentifier = "merchant.com.aldelo.mid";
+      console.log('merchantIdentifier', merchantIdentifier)
       var promise = ApplePaySession.canMakePaymentsWithActiveCard(merchantIdentifier);
       console.log('ApplePaySession.canMakePaymentsWithActiveCard....promise', promise)
       promise.then(function (canMakePayments) {
