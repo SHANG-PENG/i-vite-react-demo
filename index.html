@@ -106,6 +106,7 @@
         //     "amount": "10.99"
         //   }
         // };
+        // signed web token: eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiJ9.eyJpc3MiOiJVMzg1WUhSUzZNIiwiaWF0IjoxNzAzNjQyMDUwLCJkb21haW5zIjpbImktdml0ZS1yZWFjdC1kZW1vLXZydXcudmVyY2VsLmFwcCJdfQ.-3gzetaDRnRzk6Wrk7m6aZ0LJXT8jD97VcZ2hg-ijuSTBK14mZAFBA_J7fbPTkoRcTveuQ8ymMVvIxZvWeROCw
         const request = {
           countryCode: "US",
           currencyCode: "USD",
@@ -116,7 +117,7 @@
             type: "final",
             amount: "10.99",
           },
-          supportedMethods: "https://apple.com/apple-pay",
+          supportedMethods: "https://apple.com/apple-pay/eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiJ9.eyJpc3MiOiJVMzg1WUhSUzZNIiwiaWF0IjoxNzAzNjQyMDUwLCJkb21haW5zIjpbImktdml0ZS1yZWFjdC1kZW1vLXZydXcudmVyY2VsLmFwcCJdfQ.-3gzetaDRnRzk6Wrk7m6aZ0LJXT8jD97VcZ2hg-ijuSTBK14mZAFBA_J7fbPTkoRcTveuQ8ymMVvIxZvWeROCw",
           data: {
             version: 3,
             merchantIdentifier: "merchant.com.aldelo.mid",
