@@ -120,7 +120,6 @@
             amount: "10.99",
           },
           supportedMethods: "https://apple.com/apple-pay",
-          managementURL: "https://i-vite-react-demo-vruw.vercel.app",
           data: {
             version: 3,
             merchantIdentifier: "merchant.com.aldelo.mid",
@@ -138,7 +137,7 @@
         const session = new ApplePaySession(3, request);
 
         session.begin();
-        
+
         console.log("onApplePayButtonClicked...session", session);
 
         session.onvalidatemerchant = async (event) => {
