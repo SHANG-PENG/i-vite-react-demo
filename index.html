@@ -137,6 +137,8 @@
         // Create ApplePaySession
         const session = new ApplePaySession(3, request);
 
+        session.begin();
+        
         console.log("onApplePayButtonClicked...session", session);
 
         session.onvalidatemerchant = async (event) => {
@@ -212,8 +214,6 @@
           console.log("session.oncancel...", event);
           // Payment canceled by WebKit
         };
-
-        session.begin();
       }
     </script>
   </head>
