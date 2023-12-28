@@ -180,10 +180,12 @@
           .then((merchantSession) => {
             console.log("merchantSession", merchantSession);
             if (merchantSession?.code === 0) {
-             const aaa = session.completeMerchantValidation(merchantSession.sessionData);
+              const data = JSON.parse(merchantSession.data)
+              console.log('data', data)
+              const aaa = session.completeMerchantValidation(data);
 
-             console.log('after completeMerchantValidation', aaa)
-              handlePaymentMethodReceived(event)
+              console.log('after completeMerchantValidation', aaa)
+              // handlePaymentMethodReceived(event)
             } else {
               console.log('merchantSession - error', merchantSession)
             }
