@@ -128,6 +128,7 @@
         data: {
           version: 3,
           merchantIdentifier: "merchant.com.aldelo.mid",
+          displayName: 'Aldelo',
           initiative: "web",
           initiativeContext: "i-vite-react-demo.vercel.app",
           merchantCapabilities: ["supports3DS"],
@@ -246,13 +247,22 @@
 <body>
   <div id="root"></div>
   <br />
-  <div class="app-pay-container">
+  <class="app-pay-container">
     <apple-pay-button buttonstyle="black" type="plain" locale="en-US"
       onclick="onApplePayButtonClicked()"></apple-pay-button>
 
     <br />
+    <br/>
+
     <apple-pay-merchandising amount="108" type="plain" locale="en-US" country-code="US">
     </apple-pay-merchandising>
+<br />
+
+<form action="https://dev-api.aldelo.cloud/apgs-ms/paymentSession" method="post">
+  Domain: <input type="text" name="domain" value="app.masa.plus">
+  <input type="submit" value="提交">
+  </form>
+
   </div>
   <!-- <script type="module" src="/src/main.jsx"></script> -->
 </body>
