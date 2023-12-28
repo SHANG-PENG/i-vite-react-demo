@@ -78,7 +78,7 @@
     }
 
     function onApplePayButtonClicked() {
-      console.log( "onApplePayButtonClicked... ApplePaySession", ApplePaySession);
+      console.log("onApplePayButtonClicked... ApplePaySession", ApplePaySession);
 
       if (!ApplePaySession) return;
 
@@ -252,19 +252,19 @@
       onclick="onApplePayButtonClicked()"></apple-pay-button>
 
     <br />
-    <br/>
+    <br />
 
     <apple-pay-merchandising amount="108" type="plain" locale="en-US" country-code="US">
     </apple-pay-merchandising>
-<br />
+    <br />
 
-<form action="https://dev-api.aldelo.cloud/apgs-ms/paymentSession" method="post">
-  Domain: <input type="text" name="domain" value="app.masa.plus">
-  <input type="submit" value="提交">
-  </form>
+    <form action="https://dev-api.aldelo.cloud/apgs-ms/paymentSession" method="post">
+      Domain: <input type="text" name="domain" value="i-vite-react-demo.vercel.app">
+      <input type="submit" value="提交">
+    </form>
 
-  </div>
-  <!-- <script type="module" src="/src/main.jsx"></script> -->
+    </div>
+    <!-- <script type="module" src="/src/main.jsx"></script> -->
 </body>
 
 </html>
