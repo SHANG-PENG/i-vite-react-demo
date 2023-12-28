@@ -176,15 +176,15 @@
             'Content-Type': 'application/x-www-form-urlencoded'
           },
           body: encodedParams
-        }) .then((res) => {
-            const resJson = res.json()
-            return resJson
-          })
+        }).then((res) => {
+          const resJson = res.json()
+          return resJson
+        })
           .then((merchantSession) => {
             console.log("merchantSession", merchantSession);
-            if(merchantSession?.code === 0) {
-            session.completeMerchantValidation(merchantSession);
-            handlePaymentMethodReceived(event)
+            if (merchantSession?.code === 0) {
+              session.completeMerchantValidation(merchantSession);
+              handlePaymentMethodReceived(event)
             } else {
               console.log('merchantSession - error', merchantSession)
             }
@@ -262,10 +262,10 @@
 
     <br />
     <br />
-
+    <!-- 
     <apple-pay-merchandising amount="108" type="plain" locale="en-US" country-code="US">
     </apple-pay-merchandising>
-    <br />
+    <br /> -->
 
     <form action="https://dev-api.aldelo.cloud/apgs-ms/paymentSession" method="post">
       Domain: <input type="text" name="domain" value="i-vite-react-demo.vercel.app">
