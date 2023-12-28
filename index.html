@@ -180,7 +180,7 @@
           .then((merchantSession) => {
             console.log("merchantSession", merchantSession);
             if (merchantSession?.code === 0) {
-              const data = JSON.parse(merchantSession.data)
+              const data = JSON.parse(merchantSession.sessionData)
               console.log('data', data)
               const aaa = session.completeMerchantValidation(data);
 
