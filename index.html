@@ -67,14 +67,14 @@
       if (response.error) {
         // Report to the browser that the payment failed.
         console.log(response.error);
-        event.complete("fail");
+        // event.complete("fail");
         session.completePayment(ApplePaySession.STATUS_FAILURE);
       } else {
         // Report to the browser that the payment was successful.
         const result = {
           status: ApplePaySession.STATUS_SUCCESS,
         };
-        event.complete(result);
+        // event.complete(result);
         session.completePayment(ApplePaySession.STATUS_SUCCESS);
       }
     }
