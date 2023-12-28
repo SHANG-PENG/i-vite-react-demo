@@ -1,3 +1,0 @@
-merchantIdentifier=merchant.com.aldelo.mid
-capabilities=supports3DS  
-supportedNetworks=amex,visa,mastercard,discover,jcb,dinersClub
