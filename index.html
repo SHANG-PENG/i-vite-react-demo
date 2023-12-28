@@ -236,8 +236,9 @@
       };
 
       session.onpaymentauthorized = (event) => {
-        debugger
         console.log("session.onpaymentauthorized...", event);
+        const payment = event.payment;
+        console.log("session.onpaymentauthorized...payment", payment);
         // Define ApplePayPaymentAuthorizationResult
         const result = {
           status: ApplePaySession.STATUS_SUCCESS,
