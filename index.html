@@ -152,11 +152,6 @@
           "label": "Demo (Card is not charged)",
           "type": "final",
           "amount": "10.99"
-        },
-        "newTotal": {
-          "label": "Demo (Card is not charged)",
-          "amount": "10.99",
-          "type": "final"
         }
       };
       console.log("Create ApplePaySession...request", request);
@@ -217,21 +212,21 @@
           });
       };
 
-      session.onpaymentmethodselected = (event) => {
-        console.log("session.onpaymentmethodselected...", event);
-        // Define ApplePayPaymentMethodUpdate based on the selected payment method.
-        // No updates or errors are needed, pass an empty object.
-        const update = {};
-        session.completePaymentMethodSelection(update);
-      };
+      // session.onpaymentmethodselected = (event) => {
+      //   console.log("session.onpaymentmethodselected...", event);
+      //   // Define ApplePayPaymentMethodUpdate based on the selected payment method.
+      //   // No updates or errors are needed, pass an empty object.
+      //   const update = {};
+      //   session.completePaymentMethodSelection(update);
+      // };
 
-      session.onshippingmethodselected = (event) => {
-        console.log("session.onshippingmethodselected...", event);
-        // Define ApplePayShippingMethodUpdate based on the selected shipping method.
-        // No updates or errors are needed, pass an empty object.
-        const update = {};
-        session.completeShippingMethodSelection(update);
-      };
+      // session.onshippingmethodselected = (event) => {
+      //   console.log("session.onshippingmethodselected...", event);
+      //   // Define ApplePayShippingMethodUpdate based on the selected shipping method.
+      //   // No updates or errors are needed, pass an empty object.
+      //   const update = {};
+      //   session.completeShippingMethodSelection(update);
+      // };
 
       session.onshippingcontactselected = (event) => {
         console.log("session.onshippingcontactselected...", event);
@@ -249,24 +244,24 @@
         session.completePayment(result);
       };
 
-      session.oncouponcodechanged = (event) => {
-        console.log("session.oncouponcodechanged...", event);
+      // session.oncouponcodechanged = (event) => {
+      //   console.log("session.oncouponcodechanged...", event);
 
-        // Define ApplePayCouponCodeUpdate
-        const newTotal = calculateNewTotal(event.couponCode);
-        const newLineItems = calculateNewLineItems(event.couponCode);
-        const newShippingMethods = calculateNewShippingMethods(
-          event.couponCode
-        );
-        const errors = calculateErrors(event.couponCode);
+      //   // Define ApplePayCouponCodeUpdate
+      //   const newTotal = calculateNewTotal(event.couponCode);
+      //   const newLineItems = calculateNewLineItems(event.couponCode);
+      //   const newShippingMethods = calculateNewShippingMethods(
+      //     event.couponCode
+      //   );
+      //   const errors = calculateErrors(event.couponCode);
 
-        session.completeCouponCodeChange({
-          newTotal: newTotal,
-          newLineItems: newLineItems,
-          newShippingMethods: newShippingMethods,
-          errors: errors,
-        });
-      };
+      //   session.completeCouponCodeChange({
+      //     newTotal: newTotal,
+      //     newLineItems: newLineItems,
+      //     newShippingMethods: newShippingMethods,
+      //     errors: errors,
+      //   });
+      // };
 
       session.oncancel = (event) => {
         console.log("session.oncancel...", event);
