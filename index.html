@@ -168,9 +168,9 @@
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
           },
-          body: JSON.stringify({
+          body: {
             domain: 'i-vite-react-demo.vercel.app'
-          })
+          }
         })
           .then((res) => {
             console.log('apgs-ms/paymentSession - res', res)
