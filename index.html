@@ -117,8 +117,9 @@
       const request = {
         countryCode: "US",
         currencyCode: "USD",
-        merchantCapabilities: ["supports3DS"],
-          newTotal: "10.99",
+        merchantCapabilities: ["§"],
+        newTotal: "10.99",
+        paymentMethodType: 'discover',
         supportedNetworks: ["visa", "masterCard", "amex", "discover"],
         total: {
           label: "Demo (Card is not charged)",
@@ -137,6 +138,7 @@
           supportedNetworks: ["amex", "discover", "masterCard", "visa"],
           countryCode: "US",
           newTotal: "10.99",
+          paymentMethodType: 'discover'
         },
       };
 
