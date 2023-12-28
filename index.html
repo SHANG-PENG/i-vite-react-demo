@@ -163,14 +163,19 @@
         //     console.error("Error fetching merchant session", err);
         //   });
 
+        const params = {
+          domain: 'i-vite-react-demo.vercel.app'
+        }
+        const encodedParams = Object.keys(params)
+          .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`)
+          .join("&");
+
         fetch('https://dev-api.aldelo.cloud/apgs-ms/paymentSession', {
           method: 'post',
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
           },
-          body: {
-            domain: 'i-vite-react-demo.vercel.app'
-          }
+          body: encodedParams
         })
           .then((res) => {
             console.log('apgs-ms/paymentSession - res', res)
