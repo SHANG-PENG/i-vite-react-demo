@@ -32,8 +32,7 @@
 
 
     function handlePaymentMethodReceived(event, session, payment) {
-      const btoaToken =  btoa(unescape(encodeURIComponent(JSON.stringify(payment.token))))
-      console.log('btoaToken', btoaToken)
+      const paymentData =  btoa(unescape(encodeURIComponent(JSON.stringify(payment.token.paymentData))))
       const paymentDetails = {
         transaction_type: 1,
         merchant_id: "01",
@@ -45,7 +44,7 @@
         entry_mode: 7,
         payment_processer: 1,
         card_encrypt_info: {
-          encryption_data: btoaToken,
+          encryption_data: paymentData,
           encrypt_type: 6,
         },
       };
