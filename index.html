@@ -241,7 +241,8 @@
         const result = {
           status: ApplePaySession.STATUS_SUCCESS,
         };
-        session.completePayment(result);
+        const aaa = session.completePayment(result);
+        console.log('after completePayment - aaa', aaa)
       };
 
       // session.oncouponcodechanged = (event) => {
