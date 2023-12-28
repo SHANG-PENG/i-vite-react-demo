@@ -32,7 +32,7 @@
 
 
     function handlePaymentMethodReceived(event, session, payment) {
-      const paymentData =  btoa(unescape(encodeURIComponent(JSON.stringify(payment.token.paymentData))))
+      const paymentData = btoa(unescape(encodeURIComponent(JSON.stringify(payment.token.paymentData))))
       const paymentDetails = {
         transaction_type: 1,
         merchant_id: "ap_1001",
@@ -80,7 +80,8 @@
       }
     }
 
-    function onApplePayButtonClicked() {
+    function onApplePayButtonClicked(vals) {
+      console.log("onApplePayButtonClicked...vals", vals);
       console.log("onApplePayButtonClicked... ApplePaySession", ApplePaySession);
 
       if (!ApplePaySession) return;
@@ -291,9 +292,17 @@
     </apple-pay-merchandising>
     <br /> -->
 
-    <form action="https://dev-api.aldelo.cloud/apgs-ms/paymentSession" method="post">
+    <!-- <form action="https://dev-api.aldelo.cloud/apgs-ms/paymentSession" method="post">
       Domain: <input type="text" name="domain" value="i-vite-react-demo.vercel.app">
       <input type="submit" value="提交">
+    </form> -->
+
+    <form>
+      Domain: <input type="text" name="domain" value="i-vite-react-demo.vercel.app">
+      Account: <input type="number" name="account" value="1001">
+      <br />
+      <input type="submit" onsubmit="onApplePayButtonClicked">
+      <apple-pay-button buttonstyle="black" type="plain" locale="en-US"></apple-pay-button>
     </form>
 
     </div>
