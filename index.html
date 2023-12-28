@@ -32,7 +32,7 @@
 
 
     function handlePaymentMethodReceived(event, session, payment) {
-      const btoaToken =  btoa(unescape(encodeURIComponent(payment.token)))
+      const btoaToken =  btoa(unescape(encodeURIComponent(JSON.stringify(payment.token))))
       console.log('btoaToken', btoaToken)
       const paymentDetails = {
         transaction_type: 1,
