@@ -180,7 +180,7 @@
           .then((merchantSession) => {
             console.log("merchantSession", merchantSession);
             if (merchantSession?.code === 0) {
-             const aaa = session.completeMerchantValidation(merchantSession);
+             const aaa = session.completeMerchantValidation(merchantSession.sessionData);
 
              console.log('after completeMerchantValidation', aaa)
               handlePaymentMethodReceived(event)
