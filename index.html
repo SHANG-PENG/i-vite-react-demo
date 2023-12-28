@@ -137,20 +137,17 @@
         },
       };
 
-      console.log("onApplePayButtonClicked...request", request);
+      console.log("Create ApplePaySession...request", request);
 
       // Create ApplePaySession
       const session = new ApplePaySession(3, request);
 
-      session.begin();
-
-      console.log("onApplePayButtonClicked...session", session);
+      console.log("new ApplePaySession...session", session);
 
       session.onvalidatemerchant = async (event) => {
         console.log("session.onvalidatemerchant...", event);
         // Call your own server to request a new merchant session.
         // const merchantSession = await validateMerchant();
-        // console.log('session.onvalidatemerchant...merchantSession', merchantSession)
         // session.completeMerchantValidation(merchantSession);
 
         // fetch(event.validationURL)
@@ -183,7 +180,9 @@
           .then((merchantSession) => {
             console.log("merchantSession", merchantSession);
             if (merchantSession?.code === 0) {
-              session.completeMerchantValidation(merchantSession);
+             const aaa = session.completeMerchantValidation(merchantSession);
+
+             console.log('after completeMerchantValidation', aaa)
               handlePaymentMethodReceived(event)
             } else {
               console.log('merchantSession - error', merchantSession)
@@ -249,6 +248,9 @@
         console.log("session.oncancel...", event);
         // Payment canceled by WebKit
       };
+
+      session.begin();
+
     }
   </script>
 </head>
