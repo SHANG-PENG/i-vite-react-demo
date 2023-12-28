@@ -176,15 +176,18 @@
             'Content-Type': 'application/x-www-form-urlencoded'
           },
           body: encodedParams
-        })
-          .then((res) => {
+        }) .then((res) => {
             const resJson = res.json()
-            console.log('apgs-ms/paymentSession - resJson', resJson)
             return resJson
-          }) // Parse the response as JSON.
+          })
           .then((merchantSession) => {
             console.log("merchantSession", merchantSession);
+            if(merchantSession?.code === 0) {
             session.completeMerchantValidation(merchantSession);
+            handlePaymentMethodReceived(event)
+            } else {
+              console.log('merchantSession - error', merchantSession)
+            }
           })
           .catch((err) => {
             console.error("Error fetching merchant session", err);
