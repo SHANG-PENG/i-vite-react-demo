@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <title>前端表单</title>
+    <style>
+        /* CSS 样式，您可以根据需要添加更多样式 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        form {
+            width: 360px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        select,
+        input[type="text"],
+        input[type="number"],
+        textarea {
+            width: 95%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        select {
+            width: 100%;
+            height: 42px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .apple-pay-button {
+            display: inline-block;
+            width: 120px;
+            height: 32px;
+            background-color: #000;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        apple-pay-button {
+            --apple-pay-button-width: 300px;
+            --apple-pay-button-height: 60px;
+            --apple-pay-button-border-radius: 0px;
+            --apple-pay-button-padding: 0px 0px;
+            --apple-pay-button-box-sizing: border-box;
+        }
+    </style>
+
+    <script src="https://unpkg.com/vconsole@latest/dist/vconsole.min.js"></script>
+    <script src="https://applepay.cdn-apple.com/jsapi/v1.1.0/apple-pay-sdk.js" async crossorigin
+        data-initial-token="eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiJ9.eyJpc3MiOiJVMzg1WUhSUzZNIiwiaWF0IjoxNzAzNjU5ODMzLCJkb21haW5zIjpbImktdml0ZS1yZWFjdC1kZW1vLnZlcmNlbC5hcHAiXX0.JRz3R4_DZZ_54bNbbTOufICNh8ZGgTcpLg_uE73o_aOenBJ6WSsmKcpKWZwJW7RDSPJo6vU8aNFIN2jvWNkX1g"></script>
+    <script type="text/javascript">
+        var vConsole = new window.VConsole();
+    </script>
+</head>
+
+<body>
+    <form id="myForm">
+        <label for="transaction_type">Transaction Type：</label>
+        <select id="transaction_type" name="transaction_type">
+            <option value="1">Auth</option>
+            <option value="2">Balance Inquiry</option>
+            <option value="3">Post Auth</option>
+            <option value="4">Sale</option>
+            <option value="5">Refund</option>
+            <option value="6">Void</option>
+            <option value="7">Transarmor Token</option>
+            <option value="8">Verification</option>
+        </select><br><br>
+        <label for="merchant_id">Merchant ID：</label>
+        <input type="text" id="merchant_id" name="merchant_id" required><br><br>
+        <label for="transaction_amount">Transaction Amount：</label>
+        <input type="number" id="transaction_amount" name="transaction_amount" required><br><br>
+        <button class="apple-pay-button" type="submit">Apple Pay</button>
+
+        <apple-pay-button buttonstyle="black" type="plain" locale="en-US" onclick="onApplePayButtonClicked()">
+        </apple-pay-button>
+    </form>
+    <script>
+        // 表单提交的脚本代码  
+        document.getElementById('myForm').addEventListener('submit', function (event) {
+            event.preventDefault(); // 阻止表单默认提交行为  
+            console.log('表单提交成功！', event);
+            alert('表单提交成功！');
+        });  
+    </script>
+</body>
+
+</html>
