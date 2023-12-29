@@ -41,7 +41,7 @@ const App = () => {
         "encrypt_type": 6
       }
     }
-    
+
     const response = await fetch('https://dev-api.aldelo.cloud/apgs-ms/rest/v1/api/input', {
       method: 'post',
       headers: {
@@ -114,7 +114,12 @@ const App = () => {
   }
 
   // Use a traditional checkout form.
-  return 'Insert your form or button component here.';
+  // return 'Insert your form or button component here.';
+  return (
+    <apple-pay-button buttonstyle="black" type="plain" locale="en-US"
+      onclick="onApplePayButtonClicked()">
+    </apple-pay-button>
+  )
 };
 
 export default App

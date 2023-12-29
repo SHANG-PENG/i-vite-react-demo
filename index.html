@@ -30,7 +30,6 @@
   <script type="text/javascript">
     var vConsole = new window.VConsole();
 
-
     function handlePaymentMethodReceived(event, session, payment) {
       const paymentData = btoa(unescape(encodeURIComponent(JSON.stringify(payment.token.paymentData))))
       const paymentDetails = {
@@ -212,12 +211,15 @@
             console.error("Error fetching merchant session", err);
           });
       };
-
+      
+      // apple pay demo on web: https://applepaydemo.apple.com/
       // session.onpaymentmethodselected = (event) => {
       //   console.log("session.onpaymentmethodselected...", event);
       //   // Define ApplePayPaymentMethodUpdate based on the selected payment method.
       //   // No updates or errors are needed, pass an empty object.
-      //   const update = {};
+      //   const update = {
+      //     newTotal: 10000
+      //   };
       //   session.completePaymentMethodSelection(update);
       // };
 
@@ -245,7 +247,6 @@
         // };
         // session.completePayment(result);
         handlePaymentMethodReceived(event, session, payment)
-
       };
 
       // session.oncouponcodechanged = (event) => {
@@ -273,7 +274,6 @@
       };
 
       session.begin();
-
     }
   </script>
 </head>
@@ -283,7 +283,8 @@
   <br />
   <class="app-pay-container">
     <apple-pay-button buttonstyle="black" type="plain" locale="en-US"
-      onclick="onApplePayButtonClicked()"></apple-pay-button>
+      onclick="onApplePayButtonClicked()">
+    </apple-pay-button>
 
     <br />
     <br />
