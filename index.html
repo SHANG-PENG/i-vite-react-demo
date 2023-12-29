@@ -59,9 +59,9 @@
     }
 
     apple-pay-button {
-      --apple-pay-button-width: 300px;
-      --apple-pay-button-height: 60px;
-      --apple-pay-button-border-radius: 0px;
+      --apple-pay-button-width: 360px;
+      --apple-pay-button-height: 48px;
+      --apple-pay-button-border-radius: 5px;
       --apple-pay-button-padding: 0px 0px;
       --apple-pay-button-box-sizing: border-box;
     }
@@ -332,8 +332,8 @@
   <div id="root"></div>
   <br />
   <class="app-pay-container">
-    <apple-pay-button buttonstyle="black" type="plain" locale="en-US" onclick="onApplePayButtonClicked()">
-    </apple-pay-button>
+    <!-- <apple-pay-button buttonstyle="black" type="plain" locale="en-US" onclick="onApplePayButtonClicked()">
+    </apple-pay-button> -->
 
     <br />
     <br />
@@ -374,8 +374,8 @@
       <input type="text" id="merchant_id" name="merchant_id" required><br><br>
       <label for="transaction_amount">Transaction Amount：</label>
       <input type="number" id="transaction_amount" name="transaction_amount" required><br><br>
-      <button class="apple-pay-button" type="submit">Apple Pay</button>
-
+      <button class="apple-pay-button" type="submit" onclick="onApplePayButtonClicked()">Apple Pay</button>
+      <br/>
       <apple-pay-button buttonstyle="black" type="plain" locale="en-US" onclick="onApplePayButtonClicked()">
       </apple-pay-button>
     </form>
