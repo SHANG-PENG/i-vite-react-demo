@@ -216,7 +216,7 @@
         "total": {
           "label": "Demo (Card is not charged)",
           "type": "final",
-          "amount": transaction_amount || 0
+          "amount": `${transaction_amount || 0}`
         }
       };
       console.log("Create ApplePaySession...request", request);
