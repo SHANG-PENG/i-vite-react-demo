@@ -90,7 +90,7 @@
       console.log("transaction_type", transaction_type);
       console.log("merchant_id", merchant_id);
       console.log("transaction_amount", transaction_amount);
-      
+
       const paymentDetails = {
         transaction_type: transaction_type,
         merchant_id: merchant_id,
@@ -388,8 +388,8 @@
       <input type="number" id="transaction_amount" name="transaction_amount" required><br><br>
       <!-- <button class="apple-pay-button" type="submit" onclick="onApplePayButtonClicked()">Apple Pay</button> -->
       <br />
-      <!-- <apple-pay-button buttonstyle="black" type="plain" locale="en-US" onclick="onApplePayButtonClicked()">
-      </apple-pay-button> -->
+      <apple-pay-button buttonstyle="black" type="plain" locale="en-US" onclick="onApplePayButtonClicked()">
+      </apple-pay-button>
     </form>
     <script>
       // 表单提交的脚本代码  
