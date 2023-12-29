@@ -92,7 +92,7 @@
       console.log("transaction_amount", transaction_amount);
 
       const paymentDetails = {
-        transaction_type: transaction_type,
+        transaction_type: isNaN(transaction_type)? transaction_type: parseInt(transaction_type),
         merchant_id: merchant_id,
         terminal_id: "pd0001",
         transaction_amount: transaction_amount,
