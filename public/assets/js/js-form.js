@@ -1,5 +1,9 @@
 // formGenerator.js  
 function createForm() {  
+    // 获取当前页面的URL
+    var currentURL = window.location.href;
+    console.log("Current URL: " + currentURL, window.location);
+
     var form = document.createElement("form");  
     form.setAttribute("action", "/submit-form"); // 设置表单提交的目标URL  
     form.setAttribute("method", "post"); // 设置表单提交方法  
