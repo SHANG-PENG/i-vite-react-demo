@@ -1,6 +1,5 @@
 // formGenerator.js  
 function createForm() {  
-    // 创建一个表单元素  
     var form = document.createElement("form");  
     form.setAttribute("action", "/submit-form"); // 设置表单提交的目标URL  
     form.setAttribute("method", "post"); // 设置表单提交方法  
