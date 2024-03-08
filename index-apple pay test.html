@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <!-- <link rel="icon" type="image/svg+xml" href="/vite.svg" /> -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <title>Apple Pay On the Web Demo</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+
+    form {
+      width: 360px;
+      margin: 0 auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+
+    select,
+    input[type="text"],
+    input[type="number"],
+    textarea {
+      width: 95%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+
+    select {
+      width: 100%;
+      height: 36px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+
+    .apple-pay-button {
+      display: inline-block;
+      width: 360px;
+      height: 48px;
+      background-color: #000;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    apple-pay-button {
+      --apple-pay-button-width: 360px;
+      --apple-pay-button-height: 48px;
+      --apple-pay-button-border-radius: 5px;
+      --apple-pay-button-padding: 0px 0px;
+      --apple-pay-button-box-sizing: border-box;
+    }
+
+    .app-pay-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 80vh;
+    }
+  </style>
+
+  <script src="https://unpkg.com/vconsole@latest/dist/vconsole.min.js"></script>
+  <script src="https://applepay.cdn-apple.com/jsapi/v1.1.0/apple-pay-sdk.js" async crossorigin
+    data-initial-token="eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiJ9.eyJpc3MiOiJVMzg1WUhSUzZNIiwiaWF0IjoxNzAzNjU5ODMzLCJkb21haW5zIjpbImktdml0ZS1yZWFjdC1kZW1vLnZlcmNlbC5hcHAiXX0.JRz3R4_DZZ_54bNbbTOufICNh8ZGgTcpLg_uE73o_aOenBJ6WSsmKcpKWZwJW7RDSPJo6vU8aNFIN2jvWNkX1g"></script>
+
+  <script type="text/javascript">
+    var vConsole = new window.VConsole();
+
+    function handlePaymentMethodReceived(event, session, payment) {
+      const paymentData = btoa(unescape(encodeURIComponent(JSON.stringify(payment.token.paymentData))))
+
+      const transaction_type = document.getElementById("transaction_type").value;
+      const merchant_id = document.getElementById("merchant_id").value;
+      const transaction_amount_value = document.getElementById("transaction_amount").value;
+      const transaction_amount = (isNaN(transaction_amount_value) ? transaction_amount_value : parseFloat(transaction_amount_value)) * 100;
+
+      console.log("transaction_type", transaction_type);
+      console.log("merchant_id", merchant_id);
+      console.log("transaction_amount", transaction_amount);
+
+      const paymentDetails = {
+        transaction_type: isNaN(transaction_type) ? transaction_type : parseInt(transaction_type),
+        merchant_id: merchant_id,
+        terminal_id: "pd0001",
+        transaction_amount: transaction_amount,
+        order_number: "1122334355",
+        reference_number: "1122234455",
+        entry_mode: 7,
+        payment_processer: 1,
+        card_encrypt_info: {
+          encryption_data: paymentData,
+          encrypt_type: 6,
+        },
+      };
+      console.log("handlePaymentMethodReceived...", paymentDetails);
+
+      const response = fetch(
+        "https://dev-api.aldelo.cloud/apgs-ms/rest/v1/api/input",
+        {
+          method: "post",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(paymentDetails),
+        }
+      ).then((res) => {
+        return res.json();
+      });
+
+      console.log("response", response);
+
+      if (response.error) {
+        // Report to the browser that the payment failed.
+        console.log(response.error);
+        // event.complete("fail");
+        session.completePayment(ApplePaySession.STATUS_FAILURE);
+      } else {
+        // Report to the browser that the payment was successful.
+        const result = {
+          status: ApplePaySession.STATUS_SUCCESS,
+        };
+        // event.complete(result);
+        session.completePayment(ApplePaySession.STATUS_SUCCESS);
+      }
+    }
+
+    function onApplePayButtonClicked(vals) {
+      console.log("onApplePayButtonClicked...vals", vals);
+      console.log("onApplePayButtonClicked... ApplePaySession", ApplePaySession);
+
+      if (!ApplePaySession) return;
+
+      const transaction_amount = document.getElementById("transaction_amount").value;
+
+      var merchantIdentifier = "merchant.com.aldelo.mid";
+      var promise = ApplePaySession.canMakePaymentsWithActiveCard(merchantIdentifier);
+      console.log('ApplePaySession.canMakePaymentsWithActiveCard....promise', promise)
+      promise.then(function (canMakePayments) {
+        console.log('promise-canMakePayments', canMakePayments)
+
+        if (canMakePayments)
+          console.log('canMakePayments', canMakePayments)
+      });
+
+      // Define ApplePayPaymentRequest
+      // const request = {
+      //   "countryCode": "US",
+      //   "currencyCode": "USD",
+      //   "merchantCapabilities": [
+      //     "supports3DS"
+      //   ],
+      //   "supportedNetworks": [
+      //     "visa",
+      //     "masterCard",
+      //     "amex",
+      //     "discover"
+      //   ],
+      //   "total": {
+      //     "label": "Demo (Card is not charged)",
+      //     "type": "final",
+      //     "amount": "10.99"
+      //   }
+      // };
+      // signed web token: eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiJ9.eyJpc3MiOiJVMzg1WUhSUzZNIiwiaWF0IjoxNzAzNjU5ODMzLCJkb21haW5zIjpbImktdml0ZS1yZWFjdC1kZW1vLnZlcmNlbC5hcHAiXX0.JRz3R4_DZZ_54bNbbTOufICNh8ZGgTcpLg_uE73o_aOenBJ6WSsmKcpKWZwJW7RDSPJo6vU8aNFIN2jvWNkX1g
+
+      // https://i-vite-react-demo-vruw.vercel.app/.well-known/merchant.com.aldelo.mid
+      // const request = {
+      //   countryCode: "US",
+      //   currencyCode: "USD",
+      //   merchantCapabilities: ["§"],
+      //   supportedNetworks: ["visa", "masterCard", "amex", "discover"],
+      //   total: {
+      //     label: "Demo (Card is not charged)",
+      //     type: "final",
+      //     amount: "10.99"
+      //   },
+      //   supportedMethods: "https://apple.com/apple-pay",
+      //   data: {
+      //     version: 3,
+      //     merchantIdentifier: "merchant.com.aldelo.mid",
+      //     displayName: 'Aldelo',
+      //     initiative: "web",
+      //     initiativeContext: "i-vite-react-demo.vercel.app",
+      //     merchantCapabilities: ["supports3DS"],
+      //     supportedNetworks: ["amex", "discover", "masterCard", "visa"],
+      //     countryCode: "US"
+      //   },
+      // };
+
+      const request = {
+        "countryCode": "US",
+        "currencyCode": "USD",
+        "merchantCapabilities": [
+          "supports3DS"
+        ],
+        "supportedNetworks": [
+          "visa",
+          "masterCard",
+          "amex",
+          "discover"
+        ],
+        "total": {
+          "label": "Demo (Card is not charged)",
+          "type": "final",
+          "amount": `${transaction_amount || 0}`
+        }
+      };
+      console.log("Create ApplePaySession...request", request);
+
+      // Create ApplePaySession
+      const session = new ApplePaySession(3, request);
+
+      console.log("new ApplePaySession...session", session);
+
+      session.onvalidatemerchant = async (event) => {
+        console.log("session.onvalidatemerchant...", event);
+        // Call your own server to request a new merchant session.
+        // const merchantSession = await validateMerchant();
+        // session.completeMerchantValidation(merchantSession);
+
+        // fetch(event.validationURL)
+        //   .then((res) => res.json()) // Parse the response as JSON.
+        //   .then((merchantSession) => {
+        //     console.log("merchantSession", merchantSession);
+        //     session.completeMerchantValidation(merchantSession);
+        //   })
+        //   .catch((err) => {
+        //     console.error("Error fetching merchant session", err);
+        //   });
+
+        const params = {
+          domain: 'i-vite-react-demo.vercel.app'
+        }
+        const encodedParams = Object.keys(params)
+          .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`)
+          .join("&");
+
+        fetch('https://dev-api.aldelo.cloud/apgs-ms/paymentSession', {
+          method: 'post',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          body: encodedParams
+        }).then((res) => {
+          const resJson = res.json()
+          return resJson
+        })
+          .then((merchantSession) => {
+            console.log("merchantSession", merchantSession);
+            if (merchantSession?.code === 0) {
+              const data = JSON.parse(merchantSession.sessionData)
+              console.log('data', data)
+              session.completeMerchantValidation(data);
+            } else {
+              console.log('merchantSession - error', merchantSession)
+            }
+          })
+          .catch((err) => {
+            console.error("Error fetching merchant session", err);
+          });
+      };
+
+      // apple pay demo on web: https://applepaydemo.apple.com/
+      // session.onpaymentmethodselected = (event) => {
+      //   console.log("session.onpaymentmethodselected...", event);
+      //   // Define ApplePayPaymentMethodUpdate based on the selected payment method.
+      //   // No updates or errors are needed, pass an empty object.
+      //   const update = {
+      //     newTotal: 10000
+      //   };
+      //   session.completePaymentMethodSelection(update);
+      // };
+
+      // session.onshippingmethodselected = (event) => {
+      //   console.log("session.onshippingmethodselected...", event);
+      //   // Define ApplePayShippingMethodUpdate based on the selected shipping method.
+      //   // No updates or errors are needed, pass an empty object.
+      //   const update = {};
+      //   session.completeShippingMethodSelection(update);
+      // };
+
+      session.onshippingcontactselected = (event) => {
+        console.log("session.onshippingcontactselected...", event);
+        // Define ApplePayShippingContactUpdate based on the selected shipping contact.
+        const update = {};
+        session.completeShippingContactSelection(update);
+      };
+
+      session.onpaymentauthorized = (event) => {
+        const payment = event.payment;
+        console.log("session.onpaymentauthorized...payment", payment);
+        // Define ApplePayPaymentAuthorizationResult
+        // const result = {
+        //   status: ApplePaySession.STATUS_SUCCESS,
+        // };
+        // session.completePayment(result);
+        handlePaymentMethodReceived(event, session, payment)
+      };
+
+      // session.oncouponcodechanged = (event) => {
+      //   console.log("session.oncouponcodechanged...", event);
+
+      //   // Define ApplePayCouponCodeUpdate
+      //   const newTotal = calculateNewTotal(event.couponCode);
+      //   const newLineItems = calculateNewLineItems(event.couponCode);
+      //   const newShippingMethods = calculateNewShippingMethods(
+      //     event.couponCode
+      //   );
+      //   const errors = calculateErrors(event.couponCode);
+
+      //   session.completeCouponCodeChange({
+      //     newTotal: newTotal,
+      //     newLineItems: newLineItems,
+      //     newShippingMethods: newShippingMethods,
+      //     errors: errors,
+      //   });
+      // };
+
+      session.oncancel = (event) => {
+        console.log("session.oncancel...", event);
+        // Payment canceled by WebKit
+      };
+
+      session.begin();
+    }
+  </script>
+</head>
+
+<body>
+  <div id="root"></div>
+  <br />
+  <class="app-pay-container">
+    <!-- <apple-pay-button buttonstyle="black" type="plain" locale="en-US" onclick="onApplePayButtonClicked()">
+    </apple-pay-button> -->
+
+    <br />
+    <br />
+    <!-- 
+    <apple-pay-merchandising amount="108" type="plain" locale="en-US" country-code="US">
+    </apple-pay-merchandising>
+    <br /> -->
+
+    <!-- <form action="https://dev-api.aldelo.cloud/apgs-ms/paymentSession" method="post">
+      Domain: <input type="text" name="domain" value="i-vite-react-demo.vercel.app">
+      <input type="submit" value="提交">
+    </form> -->
+
+    <!-- <form>
+      Domain: <input type="text" name="domain" value="i-vite-react-demo.vercel.app">
+      Account: <input type="number" name="account" value="1001">
+      <br />
+      <input type="submit" onsubmit="onApplePayButtonClicked">
+      <apple-pay-button buttonstyle="black" type="plain" locale="en-US"></apple-pay-button>
+    </form>
+
+    </div> -->
+    <!-- <script type="module" src="/src/main.jsx"></script> -->
+
+    <form id="myForm">
+      <label for="transaction_type">Transaction Type：</label>
+      <select id="transaction_type" name="transaction_type">
+        <option value="1">Auth</option>
+        <option value="2">Balance Inquiry</option>
+        <option value="3">Post Auth</option>
+        <option value="4">Sale</option>
+        <option value="5">Refund</option>
+        <option value="6">Void</option>
+        <option value="7">Transarmor Token</option>
+        <option value="8">Verification</option>
+      </select><br><br>
+      <label for="merchant_id">Merchant ID：</label>
+      <input type="text" id="merchant_id" name="merchant_id" required><br><br>
+      <label for="transaction_amount">Transaction Amount：</label>
+      <input type="number" id="transaction_amount" name="transaction_amount" required><br><br>
+      <!-- <button class="apple-pay-button" type="submit" onclick="onApplePayButtonClicked()">Apple Pay</button> -->
+      <br />
+      <apple-pay-button buttonstyle="black" type="plain" locale="en-US" onclick="onApplePayButtonClicked()">
+      </apple-pay-button>
+    </form>
+    <script>
+      // 表单提交的脚本代码  
+      document.getElementById('myForm').addEventListener('submit', function (event) {
+        event.preventDefault(); // 阻止表单默认提交行为  
+        console.log('表单提交成功！', event);
+        alert('表单提交成功！');
+      });  
+    </script>
+</body>
+
+</html>
