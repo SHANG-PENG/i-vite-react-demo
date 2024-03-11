@@ -1,9 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { Suspense, useState, useEffect } from 'react';
 import {
   PaymentRequestButtonElement,
   useStripe,
 } from '@stripe/react-stripe-js';
 
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+
+// import TPayment from 'views/Auth/TPayment.tsx';
+import TPayment from './views/Auth/TPayment.tsx';
+import './App.css'
+
+/*
 const App = () => {
   const stripe = useStripe();
   const [paymentRequest, setPaymentRequest] = useState(null);
@@ -119,6 +126,31 @@ const App = () => {
     <apple-pay-button buttonstyle="black" type="plain" locale="en-US"
       onclick="onApplePayButtonClicked()">
     </apple-pay-button>
+  )
+};
+*/
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <div>Home</div>,
+  },
+  {
+    path: "/thankyou",
+    element: <div>Thank You!</div>,
+  },
+  {
+    path: "/auth-merchant-payment/:tk",
+    element: <TPayment />,
+  },
+]);
+
+
+const App = () => {
+  return (
+    <Suspense>
+      <RouterProvider router={router} />
+    </Suspense>
   )
 };
 

@@ -1,10 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Aldelo ePay TMS</title>
+  <script>
+    let url = new URL(window.location.href);
+    let params = new URLSearchParams(url.search);
+    console.log('url', url)
+    let tk = params.get('tk');
+    if (tk) {
+      // 提取或者从 api server 获取页面中需要展示的数据
+
+    }
+  </script>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -88,29 +97,9 @@
 </head>
 
 <body>
-  <form id="myForm">
-    <label for="transaction_amount" style="font-size: 24px;">Transaction Amount：$99.99</label>
-    <br>
-    <hr />
-    <br>
-    <label for="transaction_type">Card Type</label>
-    <div class="form-group">
-      <select id="transaction_type" name="transaction_type">
-        <option value="1">MasterCard</option>
-        <option value="2">Visa</option>
-        <option value="3">AMEX</option>
-        <option value="4">Discover</option>
-      </select>
-    </div>
-
-    <label for="transaction_type">Card Number</label>
-    <div class="form-group">
-      <input type="text" value="" placeholder="****Last 4" />
-    </div>
-    <div class="form-group">
-      <input type="submit" value="Pay" onclick="alert('Payment Successful!'); window.open('http://localhost:8002/?r=ok', '_self'); return false;" style="margin-top: 10px; background-color: #000; color: #fff; border: none; cursor: pointer; width: 100%; border-radius: 5px; height: 48px; line-height: 48px;">
-    </div>
-  </form>
+  <div id="root">
+    <script type="module" src="/src/main.jsx"></script>
+  </div>
 </body>
 
 </html>
