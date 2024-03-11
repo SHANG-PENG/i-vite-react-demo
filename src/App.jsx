@@ -140,7 +140,7 @@ const router = createBrowserRouter([
     element: <div>Thank You!</div>,
   },
   {
-    path: "/auth-merchant-payment/:tk",
+    path: "/auth-merchant-payment/:tk/:ru",
     element: <TPayment />,
   },
 ]);
